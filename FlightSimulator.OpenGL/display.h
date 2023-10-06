@@ -14,11 +14,9 @@ public:
 	void SetupFrameTime();
 	GLFWwindow* GetWindow();
 private:
-
-	// private members
-	GLFWwindow* window;
-	int width;
-	int height;
+	GLFWwindow* window; // the open GL window context.
+	int width; // window width
+	int height; // window height
 	float deltaTime; // Time between current frame and last frame.
 	float lastFrame; // Time of last frame.
 };
