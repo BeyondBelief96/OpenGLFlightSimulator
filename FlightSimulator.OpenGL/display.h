@@ -8,10 +8,11 @@ using namespace std;
 class GameDisplay
 {
 public:
-	GameDisplay(int width, int height, string windowTitle);
+	GameDisplay(int width, int height, string windowTitle, GLFWcursorposfun mouseCallback, GLFWscrollfun scrollCallback);
 	int GetWidth();
 	int GetHeight();
 	void SetupFrameTime();
+	float DeltaTime();
 	GLFWwindow* GetWindow();
 private:
 	GLFWwindow* window; // the open GL window context.

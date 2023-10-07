@@ -3,7 +3,7 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
-GameDisplay::GameDisplay(int width, int height, string windowTitle)
+GameDisplay::GameDisplay(int width, int height, string windowTitle, GLFWcursorposfun mouseCallback, GLFWscrollfun scrollCallback)
 {
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -18,6 +18,8 @@ GameDisplay::GameDisplay(int width, int height, string windowTitle)
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorPosCallback(window, mouseCallback);
+	glfwSetScrollCallback(window, scrollCallback);
 
 	// configure global opengl state
 	// -----------------------------
@@ -26,12 +28,21 @@ GameDisplay::GameDisplay(int width, int height, string windowTitle)
 
 int GameDisplay::GetWidth()
 {
+	int width;
+	glfwGetWindowSize(window, &width, NULL);
 	return width;
 }
 
 int GameDisplay::GetHeight()
 {
+	int height;
+	glfwGetWindowSize(window, NULL, &height);
 	return height;
+}
+
+float GameDisplay::DeltaTime()
+{
+	return deltaTime;
 }
 
 GLFWwindow* GameDisplay::GetWindow()
