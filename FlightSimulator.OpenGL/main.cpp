@@ -7,6 +7,8 @@
 #include "display.h"
 #include "model.h"
 #include "camera.h"
+#include "texture.h"
+#include "skybox.h"
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -40,11 +42,36 @@ int main()
 	// build and compile our shader program
 	// ------------------------------------
 	Shader shader("./Shaders/modelLoading.vs", "./Shaders/modelLoading.frag");
+	Shader skyboxShader("./Shaders/skybox.vs", "./Shaders/skybox.frag");
 
 	// load models
 	// -----------
 	const GLchar* modelPath = "./Models/nanosuit/nanosuit.obj";
 	Model ourModel(modelPath);
+
+	// skybox VAO
+	GLuint skyboxVAO, skyboxVBO;
+	glGenVertexArrays(1, &skyboxVAO);
+	glGenBuffers(1, &skyboxVBO);
+	glBindVertexArray(skyboxVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+	// load textures
+	// -------------
+	vector<std::string> faces
+	{
+		"./images/skybox/right.jpg",
+		"./images/skybox/left.jpg",
+		"./images/skybox/top.jpg",
+		"./images/skybox/bottom.jpg",
+		"./images/skybox/front.jpg",
+		"./images/skybox/back.jpg",
+	};
+
+	GLuint cubemapTexture = loadCubemap(faces);
 
 	while (!glfwWindowShouldClose(gameDisplay.GetWindow()))
 	{
