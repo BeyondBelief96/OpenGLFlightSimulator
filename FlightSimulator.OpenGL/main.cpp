@@ -46,7 +46,7 @@ int main()
 
 	// load models
 	// -----------
-	const GLchar* modelPath = "./Models/nanosuit/nanosuit.obj";
+	const GLchar* modelPath = "./Models/plane/Aereo O.obj";
 	Model ourModel(modelPath);
 
 	// skybox VAO
@@ -89,7 +89,7 @@ int main()
 		shader.Use();
 
 		// view/projection transformations
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)gameDisplay.GetWidth() / (float)gameDisplay.GetHeight(), 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)gameDisplay.GetWidth() / (float)gameDisplay.GetHeight(), 0.1f, 1000.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
@@ -100,6 +100,20 @@ int main()
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
 		shader.setMat4("model", model);
 		ourModel.Draw(shader);
+
+		//// draw skybox as last
+		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+		skyboxShader.Use();
+		view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+		skyboxShader.setMat4("view", view);
+		skyboxShader.setMat4("projection", projection);
+		// skybox cube
+		glBindVertexArray(skyboxVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		glBindVertexArray(0);
+		glDepthFunc(GL_LESS); // set depth function back to default
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

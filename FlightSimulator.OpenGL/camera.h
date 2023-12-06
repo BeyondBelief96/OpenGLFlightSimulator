@@ -18,7 +18,8 @@ enum Camera_Movement {
 // Default camera values
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
-const float SPEED = 2.5f;
+const float ROLL = 0.0f;
+const float SPEED = 50.0f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
@@ -36,18 +37,20 @@ public:
     // euler Angles
     float Yaw;
     float Pitch;
+    float Roll;
     // camera options
     float MovementSpeed;
     float MouseSensitivity;
     float Zoom;
 
     // constructor with vectors
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH, float roll = ROLL) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
     {
         Position = position;
         WorldUp = up;
         Yaw = yaw;
         Pitch = pitch;
+        Roll = roll;
         updateCameraVectors();
     }
     // constructor with scalar values
@@ -64,6 +67,26 @@ public:
     glm::mat4 GetViewMatrix()
     {
         return glm::lookAt(Position, Position + Front, Up);
+    }
+
+    // Update the camera position and orientation based on the airplane's position and orientation
+    void UpdateFromAircraft(const glm::vec3& aircraftPosition, const glm::vec3& aircraftFront, const glm::vec3& aircraftUp, float aircraftRoll)
+    {
+        // Set the camera position behind the airplane
+        Position = aircraftPosition - aircraftFront * DistanceBehind;
+
+        // Look at the airplane
+        Front = glm::normalize(aircraftPosition - Position);
+        Right = glm::normalize(glm::cross(Front, WorldUp));
+        Up = glm::normalize(glm::cross(Right, Front));
+
+        // Update roll
+        Roll = aircraftRoll;
+
+        glm::mat4 rollMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(Roll), Front);
+        Right = glm::normalize(glm::vec3(rollMatrix * glm::vec4(Right, 0.0f)));
+        Up = glm::normalize(glm::vec3(rollMatrix * glm::vec4(Up, 0.0f)));
+
     }
 
     // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
@@ -113,6 +136,8 @@ public:
     }
 
 private:
+    float DistanceBehind = 10.0f; // Adjust distance as needed.
+
     // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors()
     {
