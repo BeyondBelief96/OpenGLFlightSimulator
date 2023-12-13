@@ -7,6 +7,8 @@
 
 #include <vector>
 
+#include "display.h"
+
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
 enum Camera_Movement {
     FORWARD,
@@ -42,9 +44,12 @@ public:
     float MovementSpeed;
     float MouseSensitivity;
     float Zoom;
+    GameDisplay display;
 
+    Camera() : display(0, 0, "", NULL, NULL) {}
     // constructor with vectors
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH, float roll = ROLL) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+    Camera(GameDisplay& display, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH, float roll = ROLL) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM),
+        display(display)
     {
         Position = position;
         WorldUp = up;
@@ -54,13 +59,25 @@ public:
         updateCameraVectors();
     }
     // constructor with scalar values
-    Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+    Camera(GameDisplay& display, float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM),
+        display(display)
     {
         Position = glm::vec3(posX, posY, posZ);
         WorldUp = glm::vec3(upX, upY, upZ);
         Yaw = yaw;
         Pitch = pitch;
         updateCameraVectors();
+    }
+
+    glm::mat4 GetViewProjMatrix()
+    {
+        glm::mat4 projection = glm::perspective(glm::radians(Zoom), (float)display.GetWidth() / (float)display.GetHeight(), 0.1f, 1000.0f);
+        return projection * GetViewMatrix();
+    }
+
+    glm::mat4 GetProjectionMatrix()
+    {
+        return glm::perspective(glm::radians(Zoom), (float)display.GetWidth() / (float)display.GetHeight(), 0.1f, 1000.0f);
     }
 
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
@@ -73,7 +90,7 @@ public:
     void UpdateFromAircraft(const glm::vec3& aircraftPosition, const glm::vec3& aircraftFront, const glm::vec3& aircraftUp, float aircraftRoll)
     {
         // Set the camera position behind the airplane
-        Position = aircraftPosition - aircraftFront * DistanceBehind;
+        Position = aircraftPosition - aircraftFront * DistanceBehind + aircraftUp * DistanceAbove;
 
         // Look at the airplane
         Front = glm::normalize(aircraftPosition - Position);
@@ -136,7 +153,8 @@ public:
     }
 
 private:
-    float DistanceBehind = 10.0f; // Adjust distance as needed.
+    float DistanceBehind = 500.0f; // Adjust distance as needed.
+    float DistanceAbove = 100.0f; // Adjust distance as needed.
 
     // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors()

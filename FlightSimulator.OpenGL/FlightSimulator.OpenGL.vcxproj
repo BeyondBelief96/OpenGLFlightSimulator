@@ -70,6 +70,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\OpenGL\include\Misc;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\OpenGL\include\Misc;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -104,7 +110,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\brand\Code\cpp\FlightSimulator\FlightSimulator.OpenGL\SOIL2;C:\OpenGL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\brand\Code\cpp\FlightSimulator\FlightSimulator.OpenGL\headers;C:\Users\brand\Code\cpp\FlightSimulator\FlightSimulator.OpenGL\SOIL2;C:\OpenGL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +127,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\OpenGL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\brand\Code\cpp\FlightSimulator\FlightSimulator.OpenGL\headers;C:\OpenGL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,19 +139,39 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="display.cpp" />
-    <ClCompile Include="glad.c" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="stb_image.cpp" />
+    <ClCompile Include="src\display.cpp" />
+    <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\stb_image.cpp" />
+    <ClCompile Include="src\terrain.cpp" />
+    <ClCompile Include="src\triangle_list.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="camera.h" />
-    <ClInclude Include="display.h" />
-    <ClInclude Include="mesh.h" />
-    <ClInclude Include="model.h" />
-    <ClInclude Include="shader.h" />
-    <ClInclude Include="skybox.h" />
-    <ClInclude Include="texture.h" />
+    <ClInclude Include="headers\airplane.h" />
+    <ClInclude Include="headers\camera.h" />
+    <ClInclude Include="headers\constants.h" />
+    <ClInclude Include="headers\data.h" />
+    <ClInclude Include="headers\display.h" />
+    <ClInclude Include="headers\engine.h" />
+    <ClInclude Include="headers\mesh.h" />
+    <ClInclude Include="headers\model.h" />
+    <ClInclude Include="headers\physics.h" />
+    <ClInclude Include="headers\rigidbody.h" />
+    <ClInclude Include="headers\shader.h" />
+    <ClInclude Include="headers\skybox.h" />
+    <ClInclude Include="headers\terrain.h" />
+    <ClInclude Include="headers\texture.h" />
+    <ClInclude Include="headers\triangle_list.h" />
+    <ClInclude Include="headers\utils.h" />
+    <ClInclude Include="headers\wing.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\modelLoading.frag" />
+    <None Include="shaders\modelLoading.vs" />
+    <None Include="shaders\skybox.frag" />
+    <None Include="shaders\skybox.vs" />
+    <None Include="shaders\terrain.fs" />
+    <None Include="shaders\terrain.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

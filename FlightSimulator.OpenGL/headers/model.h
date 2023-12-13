@@ -18,6 +18,8 @@
 #include <assimp/postprocess.h>
 
 #include "mesh.h"
+#include "constants.h"
+#include "camera.h"
 
 using namespace std;
 
@@ -26,22 +28,28 @@ GLint TextureFromFile(const char* path, string directory);
 class Model
 {
 public:
-	Model(const GLchar* path)
+	Model(const GLchar* path, const GLchar* vShaderPath, const GLchar* fShaderPath) 
+		: modelShader(vShaderPath, fShaderPath)
 	{
 		this->loadModel(path);
 	}
 
-	void Draw(Shader shader)
+	void Draw(glm::mat4 modelMatrix, Camera& camera)
 	{
+		modelShader.Use();
+		modelShader.setMat4(shaderModelMatUniformName, modelMatrix);
+		modelShader.setMat4(shaderViewProjMatUniformName, camera.GetViewProjMatrix());
+
 		for (GLuint i = 0; i < this->meshes.size(); i++)
 		{
-			this->meshes[i].Draw(shader);
+			this->meshes[i].Draw(modelShader);
 		}
 	}
 private:
 	vector<Mesh> meshes;
 	string directory;
 	vector<Texture> textures_loaded;
+	Shader modelShader;
 
 	// loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
 	void loadModel(string path)
