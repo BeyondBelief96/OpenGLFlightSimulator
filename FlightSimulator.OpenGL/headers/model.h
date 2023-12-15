@@ -23,18 +23,18 @@
 
 using namespace std;
 
-GLint TextureFromFile(const char* path, string directory);
-
 class Model
 {
 public:
+
+	Model() {};
 	Model(const GLchar* path, const GLchar* vShaderPath, const GLchar* fShaderPath) 
 		: modelShader(vShaderPath, fShaderPath)
 	{
 		this->loadModel(path);
 	}
 
-	void Draw(glm::mat4 modelMatrix, Camera& camera)
+	void Render(glm::mat4 modelMatrix, Camera& camera)
 	{
 		modelShader.Use();
 		modelShader.setMat4(shaderModelMatUniformName, modelMatrix);
@@ -55,7 +55,7 @@ private:
 	void loadModel(string path)
 	{
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+		const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipWindingOrder | aiProcess_FlipUVs);
 		if (!scene || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 		{
 			cout << "ERROR::ASSIMP::" << importer.GetErrorString() << endl;

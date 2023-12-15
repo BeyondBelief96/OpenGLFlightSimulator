@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <vector>
 
-#include "triangle_list.h"
+#include "terrain_grid.h"
 #include "terrain.h"
 
-void TriangleList::CreateTriangleList(int width, int depth, const BaseTerrain* pTerrain)
+void TerrainGrid::CreateTerrainGrid(int width, int depth, const BaseTerrain* pTerrain)
 {
     // Set the dimensions of the terrain.
     m_width = width;
@@ -22,7 +22,7 @@ void TriangleList::CreateTriangleList(int width, int depth, const BaseTerrain* p
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void TriangleList::CreateGLState()
+void TerrainGrid::CreateGLState()
 {
     // Generate a Vertex Array Object (VAO) and bind it.
     glGenVertexArrays(1, &m_vao);
@@ -37,18 +37,24 @@ void TriangleList::CreateGLState()
 
     // Define the location of the position attribute in the vertex shader.
     int POS_LOC = 0;
-    glEnableVertexAttribArray(POS_LOC);
+    int TEX_LOC = 1;
+
+    size_t NumFloats = 0;
 
     // Set up the vertex attribute pointer for position.
-    size_t NumFloats = 0;
+    glEnableVertexAttribArray(POS_LOC);
     glVertexAttribPointer(POS_LOC, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(NumFloats * sizeof(float)));
     NumFloats += 3;
+
+    glEnableVertexAttribArray(TEX_LOC);
+    glVertexAttribPointer(TEX_LOC, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)(NumFloats * sizeof(float)));
+    NumFloats += 2;
 }
 
-void TriangleList::PopulateBuffers(const BaseTerrain* pTerrain)
+void TerrainGrid::PopulateBuffers(const BaseTerrain* pTerrain)
 {
     // Create a vector of vertices sized based on the terrain dimensions.
-    std::vector<TriangleList::Vertex> vertices;
+    std::vector<TerrainGrid::Vertex> vertices;
     vertices.resize(m_width * m_depth);
 
     // Initialize the vertices based on the terrain data.
@@ -65,16 +71,21 @@ void TriangleList::PopulateBuffers(const BaseTerrain* pTerrain)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
 }
 
-void TriangleList::Vertex::InitVertex(const BaseTerrain* pTerrain, int x, int z)
+void TerrainGrid::Vertex::InitVertex(const BaseTerrain* pTerrain, int x, int z)
 {
     float y = pTerrain->GetHeight(x, z);
 
     float worldScale = pTerrain->GetWorldScale();
     // Set the position of the vertex in the terrain.
     pos = glm::fvec3(worldScale * x, y, worldScale* z);
+
+    float size = (float)pTerrain->GetSize();
+    float textureScale = pTerrain->GetTextureScale();
+
+    tex = glm::fvec2(textureScale * (float)x / size, textureScale * (float)z / size);
 }
 
-void TriangleList::InitIndices(std::vector<unsigned int>& indices)
+void TerrainGrid::InitIndices(std::vector<unsigned int>& indices)
 {
     int index = 0;
     for (int z = 0; z < m_depth - 1; z++)
@@ -97,7 +108,7 @@ void TriangleList::InitIndices(std::vector<unsigned int>& indices)
         }
 }
 
-void TriangleList::InitVertices(const BaseTerrain* pTerrain, std::vector<Vertex>& vertices)
+void TerrainGrid::InitVertices(const BaseTerrain* pTerrain, std::vector<Vertex>& vertices)
 {
     // Iterate over each point in the terrain grid.
     int index = 0;
@@ -113,7 +124,7 @@ void TriangleList::InitVertices(const BaseTerrain* pTerrain, std::vector<Vertex>
         }
 }
 
-void TriangleList::Render()
+void TerrainGrid::Render()
 {
     // Bind the VAO associated with this object.
     glBindVertexArray(m_vao);

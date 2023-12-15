@@ -8,17 +8,17 @@
 class BaseTerrain;
 
 // TriangleList class is responsible for managing and rendering a list of triangles, typically for terrain.
-class TriangleList
+class TerrainGrid
 {
 public:
     // Default constructor initializing OpenGL handles to zero.
-    TriangleList() : m_vao(0), m_vb(0), m_ib(0) {};
+    TerrainGrid() : m_vao(0), m_vb(0), m_ib(0) {};
 
     // Creates a triangle list for terrain rendering based on the specified dimensions and terrain data.
     // @param width: The width of the terrain in number of vertices.
     // @param depth: The depth of the terrain in number of vertices.
     // @param pTerrain: Pointer to the terrain data used for generating the triangle list.
-    void CreateTriangleList(int width, int depth, const BaseTerrain* pTerrain);
+    void CreateTerrainGrid(int width, int depth, const BaseTerrain* pTerrain);
 
     // Renders the triangle list, typically called every frame.
     void Render();
@@ -27,6 +27,7 @@ private:
     // Nested struct representing a vertex in the terrain mesh.
     struct Vertex {
         glm::fvec3 pos; // Position of the vertex in 3D space.
+        glm::fvec2 tex; // 2D Position of the texture coordinate.
 
         // Initializes a vertex with position based on the terrain data and its coordinates.
         // @param pTerrain: Pointer to the terrain data used for vertex position calculations.

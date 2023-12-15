@@ -14,6 +14,8 @@ class Shader
 {
 public:
     GLuint Program;
+
+    Shader() {}
     // Constructor generates the shader on the fly
     Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
     {

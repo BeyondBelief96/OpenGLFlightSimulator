@@ -46,9 +46,10 @@ public:
     float Zoom;
     GameDisplay display;
 
-    Camera() : display(0, 0, "", NULL, NULL) {}
     // constructor with vectors
-    Camera(GameDisplay& display, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH, float roll = ROLL) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM),
+    Camera(GameDisplay& display, glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
+        float yaw = YAW, float pitch = PITCH, float roll = ROLL) 
+        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM),
         display(display)
     {
         Position = position;
@@ -71,13 +72,13 @@ public:
 
     glm::mat4 GetViewProjMatrix()
     {
-        glm::mat4 projection = glm::perspective(glm::radians(Zoom), (float)display.GetWidth() / (float)display.GetHeight(), 0.1f, 1000.0f);
+        glm::mat4 projection = glm::perspective(glm::radians(Zoom), (float)display.GetWidth() / (float)display.GetHeight(), nearPlane, farPlane);
         return projection * GetViewMatrix();
     }
 
     glm::mat4 GetProjectionMatrix()
     {
-        return glm::perspective(glm::radians(Zoom), (float)display.GetWidth() / (float)display.GetHeight(), 0.1f, 1000.0f);
+        return glm::perspective(glm::radians(Zoom), (float)display.GetWidth() / (float)display.GetHeight(), nearPlane, farPlane);
     }
 
     // returns the view matrix calculated using Euler Angles and the LookAt Matrix
@@ -97,12 +98,12 @@ public:
         Right = glm::normalize(glm::cross(Front, WorldUp));
         Up = glm::normalize(glm::cross(Right, Front));
 
-        // Update roll
-        Roll = aircraftRoll;
+        //// Update roll
+        //Roll = aircraftRoll;
 
-        glm::mat4 rollMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(Roll), Front);
-        Right = glm::normalize(glm::vec3(rollMatrix * glm::vec4(Right, 0.0f)));
-        Up = glm::normalize(glm::vec3(rollMatrix * glm::vec4(Up, 0.0f)));
+        //glm::mat4 rollMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(Roll), Front);
+        //Right = glm::normalize(glm::vec3(rollMatrix * glm::vec4(Right, 0.0f)));
+        //Up = glm::normalize(glm::vec3(rollMatrix * glm::vec4(Up, 0.0f)));
 
     }
 
@@ -154,7 +155,9 @@ public:
 
 private:
     float DistanceBehind = 500.0f; // Adjust distance as needed.
-    float DistanceAbove = 100.0f; // Adjust distance as needed.
+    float DistanceAbove = 200.0f; // Adjust distance as needed.
+    float nearPlane = 0.1f; // nearest distance the camera will render.
+    float farPlane = 100000; // fathest distance the camera will render.
 
     // calculates the front vector from the Camera's (updated) Euler Angles
     void updateCameraVectors()

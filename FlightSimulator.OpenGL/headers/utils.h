@@ -7,6 +7,8 @@
 #include <stdarg.h>
 #include <string.h>
 
+#define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
+
 char* ReadBinaryFile(const char* pFilename, int& size)
 {
     FILE* f = nullptr;

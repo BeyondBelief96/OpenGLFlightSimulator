@@ -33,7 +33,16 @@
     <ClCompile Include="src\terrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\triangle_list.cpp">
+    <ClCompile Include="src\terrain_grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FaultFormationTerrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ogldev_texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ogldev_stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,37 +65,40 @@
     <ClInclude Include="headers\skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\rigidbody.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="headers\terrain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="headers\airplane.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\data.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="headers\physics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\triangle_list.h">
+    <ClInclude Include="headers\terrain_grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\wing.h">
+    <ClInclude Include="headers\constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\constants.h">
+    <ClInclude Include="headers\joystick.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\fault_formation_terrain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\texture_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\3rdParty\ogldev_texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\3rdParty\ogldev_stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\3rdParty\stb_image_define.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -140,30 +140,34 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\display.cpp" />
+    <ClCompile Include="src\FaultFormationTerrain.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ogldev_stb_image.cpp" />
+    <ClCompile Include="src\ogldev_texture.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\terrain.cpp" />
-    <ClCompile Include="src\triangle_list.cpp" />
+    <ClCompile Include="src\terrain_grid.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\airplane.h" />
     <ClInclude Include="headers\camera.h" />
     <ClInclude Include="headers\constants.h" />
     <ClInclude Include="headers\data.h" />
     <ClInclude Include="headers\display.h" />
-    <ClInclude Include="headers\engine.h" />
+    <ClInclude Include="headers\fault_formation_terrain.h" />
+    <ClInclude Include="headers\joystick.h" />
     <ClInclude Include="headers\mesh.h" />
     <ClInclude Include="headers\model.h" />
+    <ClInclude Include="headers\3rdParty\ogldev_stb_image.h" />
+    <ClInclude Include="headers\3rdParty\ogldev_texture.h" />
     <ClInclude Include="headers\physics.h" />
-    <ClInclude Include="headers\rigidbody.h" />
     <ClInclude Include="headers\shader.h" />
     <ClInclude Include="headers\skybox.h" />
+    <ClInclude Include="headers\3rdParty\stb_image_define.h" />
     <ClInclude Include="headers\terrain.h" />
-    <ClInclude Include="headers\texture.h" />
-    <ClInclude Include="headers\triangle_list.h" />
+    <ClInclude Include="headers\texture_config.h" />
+    <ClInclude Include="headers\terrain_grid.h" />
     <ClInclude Include="headers\utils.h" />
-    <ClInclude Include="headers\wing.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\modelLoading.frag" />
