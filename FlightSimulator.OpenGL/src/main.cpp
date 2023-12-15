@@ -46,6 +46,7 @@ float filter = 0.80f;
 
 // Function declartions
 void InitializeOpenGLState();
+void RenderScene();
 FaultFormationTerrain InitializeTerrain(float minHeight, float maxHeight);
 FaultFormationTerrain InitTerrainMultiTextures(FaultFormationTerrain& terrain, float minHeight, float maxHeight);
 
