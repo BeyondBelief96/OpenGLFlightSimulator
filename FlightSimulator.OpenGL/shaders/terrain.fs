@@ -94,6 +94,6 @@ vec4 CalcTexColor()
 
 void main()
 {
-    vec4 TexColor = CalcTexColor();
+    vec4 TexColor = CalcTexColorRealistic();
     FragColor = Color * TexColor;
 }

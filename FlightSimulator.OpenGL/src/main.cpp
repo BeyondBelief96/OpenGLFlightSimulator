@@ -30,7 +30,7 @@ float lastY = gameDisplay.GetHeight() / 2.0f;
 bool firstMouse = true;
 bool gamepadConnected;
 Joystick joystick;
-glm::vec3 initial_position = { 1500.0f, 5000.0f, 1000.0f};
+glm::vec3 initial_position = { 3000.0f, 3000.0f, 3000.0f};
 Camera aircraftCamera = Camera(gameDisplay, initial_position);
 Model planeModel;
 FaultFormationTerrain m_terrain;
@@ -38,10 +38,10 @@ FaultFormationTerrain m_terrain;
 // Terrain variables
 float worldScale = 20.0;
 float textureScale = 40.0;
-int terrainSize = 2048;
+int terrainSize = 1024;
 int iterations = 500;
 float minHeight = 0.0f;
-float maxHeight = 5000.0f;
+float maxHeight = 2500.0f;
 float filter = 0.80f;
 
 // Function declartions
