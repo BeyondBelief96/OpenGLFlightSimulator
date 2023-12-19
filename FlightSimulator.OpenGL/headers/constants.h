@@ -5,6 +5,8 @@ constexpr char terrainVertexShaderPath[] = "./Shaders/terrain.vs";
 constexpr char terrainFragmentShaderPath[] = "./Shaders/terrain.fs";
 constexpr char planeModelVertexShaderPath[] = "./Shaders/modelLoading.vs";
 constexpr char planeModelFragmentShaderPath[] = "./Shaders/modelLoading.frag";
+constexpr char skyboxVertexShaderPath[] = "./Shaders/skybox.vs";
+constexpr char skyboxFragmentShaderPath[] = "./Shaders/skybox.frag";
 
 constexpr char shaderViewProjMatUniformName[] = "viewProjMat";
 constexpr char shaderModelMatUniformName[] = "model";

@@ -24,29 +24,30 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window); 
 
 // Global variables
-GameDisplay gameDisplay(1920, 1080, "FlightSimulator", mouse_callback, scroll_callback);
-float lastX = gameDisplay.GetWidth() / 2.0f;
-float lastY = gameDisplay.GetHeight() / 2.0f;
+GameDisplay gameDisplay;
+float lastX;
+float lastY;
 bool firstMouse = true;
 bool gamepadConnected;
 Joystick joystick;
-glm::vec3 initial_position = { 3000.0f, 3000.0f, 3000.0f};
-Camera aircraftCamera = Camera(gameDisplay, initial_position);
+
+glm::vec3 initial_position = { 5000.0f, 5000.0f, 3000.0f};
+Camera aircraftCamera;
 Model planeModel;
 FaultFormationTerrain m_terrain;
 
-// Terrain variables
-float worldScale = 20.0;
+// Terrain global variables
+float worldScale = 20.0f;
 float textureScale = 40.0;
 int terrainSize = 1024;
 int iterations = 500;
-float minHeight = 0.0f;
-float maxHeight = 2500.0f;
+float minHeight = 0;
+float maxHeight = 5000.0f;
 float filter = 0.80f;
 
 // Function declartions
 void InitializeOpenGLState();
-void RenderScene();
+void RenderScene(Skybox& skybox);
 FaultFormationTerrain InitializeTerrain(float minHeight, float maxHeight);
 FaultFormationTerrain InitTerrainMultiTextures(FaultFormationTerrain& terrain, float minHeight, float maxHeight);
 
@@ -58,8 +59,11 @@ int main()
 	// Initializes the terrain generation.
 	m_terrain = InitializeTerrain(minHeight, maxHeight);
 
-	// load models
-	// -----------
+	// Initializing skybox.
+	Skybox skybox;
+	skybox.Initialize(skyboxFaces);
+
+	//load models
 	planeModel = Model(planeModelPath, planeModelVertexShaderPath, planeModelFragmentShaderPath);
 
 	while (!glfwWindowShouldClose(gameDisplay.GetWindow()))
@@ -72,16 +76,18 @@ int main()
 
 		/*plane.update(gameDisplay.DeltaTime());*/
 
-		RenderScene();
+		RenderScene(skybox);
 	}
 
+	planeModel.DeleteBuffers();
+	skybox.Cleanup();
 	glfwTerminate();
 	return 0;
 }
 
-void RenderScene()
+void RenderScene(Skybox& skybox)
 {
-	glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// view/projection transformations
@@ -94,10 +100,11 @@ void RenderScene()
 	planeModelMatrix = glm::rotate(planeModelMatrix, glm::radians(-90.0f), physics::UP);
 	planeModel.Render(planeModelMatrix, aircraftCamera);
 
+	// render terrain.
 	m_terrain.Render(aircraftCamera);
 
-
-	glBindVertexArray(0);
+	// render skybox last
+	skybox.Render(aircraftCamera);
 
 	// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 	// -------------------------------------------------------------------------------
@@ -107,6 +114,11 @@ void RenderScene()
 
 void InitializeOpenGLState()
 {
+	gameDisplay = GameDisplay(1920, 1080, "FlightSimulator", mouse_callback, scroll_callback);
+	lastX = gameDisplay.GetWidth() / 2.0f;
+	lastY = gameDisplay.GetHeight() / 2.0f;
+	aircraftCamera = Camera(gameDisplay, initial_position);
+
 	// OpenGL initialization
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -114,6 +126,10 @@ void InitializeOpenGLState()
 		exit(-1);
 	}
 	glfwSetInputMode(gameDisplay.GetWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	// configure global opengl state
+	// -----------------------------
+	glEnable(GL_DEPTH_TEST);
 }
 
 FaultFormationTerrain InitializeTerrain(float minHeight, float maxHeight)

@@ -86,6 +86,13 @@ public:
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
+
+	void DeleteBuffers()
+	{
+		glDeleteVertexArrays(1, &VAO);
+		glDeleteBuffers(1, &VBO);
+	}
+
 private:
 	GLuint VAO, VBO, EBO;
 
