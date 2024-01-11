@@ -14,7 +14,7 @@ class BaseTerrain
 {
 public:
     // Default constructor.
-    BaseTerrain() {}
+    BaseTerrain() = default;
 
     // Constructor that initializes the terrain with shader paths and a world scaling factor.
     // @param vShaderPath: Path to the vertex shader file.

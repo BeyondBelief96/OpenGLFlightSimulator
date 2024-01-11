@@ -156,12 +156,12 @@ float skyboxVertices[] = {
 
 // Skybox images
 std::vector<std::string> skyboxFaces = {
-    "./images/skybox/right.jpg",
-    "./images/skybox/left.jpg",
-    "./images/skybox/top.jpg",
-    "./images/skybox/bottom.jpg",
-    "./images/skybox/front.jpg",
-    "./images/skybox/back.jpg",
+    "./images/skybox/Daylight Box_Right.bmp",
+    "./images/skybox/Daylight Box_Left.bmp",
+    "./images/skybox/Daylight Box_Top.bmp",
+    "./images/skybox/Daylight Box_Bottom.bmp",
+    "./images/skybox/Daylight Box_Front.bmp",
+    "./images/skybox/Daylight Box_Back.bmp",
 };
 
 #endif

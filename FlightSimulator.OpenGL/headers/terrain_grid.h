@@ -11,8 +11,8 @@ class BaseTerrain;
 class TerrainGrid
 {
 public:
-    // Default constructor initializing OpenGL handles to zero.
-    TerrainGrid() : m_vao(0), m_vb(0), m_ib(0) {};
+    // Default constructor
+    TerrainGrid() = default;
 
     // Creates a triangle list for terrain rendering based on the specified dimensions and terrain data.
     // @param width: The width of the terrain in number of vertices.
